@@ -1,0 +1,1 @@
+Čia yra demonstracinis autoserviso projektas, sukurtas su Django karkasu.
