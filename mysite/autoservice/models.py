@@ -2,48 +2,70 @@ from django.db import models as m
 import uuid
 
 class Paslauga(m.Model):
-    name = m.CharField(verbose_name="Paslaugos tipas", max_length=200)
-    price = m.FloatField(verbose_name="Paslaugos kaina \u20ac", default=0)
+    name = m.CharField(verbose_name="Paslaugos tipas")
+    price = m.FloatField(verbose_name="Paslaugos kaina \u20ac", 
+                         )
+
+    class Meta:
+        verbose_name = "Paslauga"
+        verbose_name_plural = "Paslaugos"
 
     def __str__(self):
         return self.name
     
 class Automobilis(m.Model):
-    make = m.CharField(verbose_name="Markė", max_length=100)
-    model = m.CharField(verbose_name="Modelis", max_length=100)
-    client = m.CharField(verbose_name="Kliento vardas", max_length=100)
-    license_plate = m.CharField(verbose_name="Valstybiniai numeriai", 
-                                max_length=6)
+    make = m.CharField(verbose_name="Markė")
+    model = m.CharField(verbose_name="Modelis")
+    client = m.CharField(verbose_name="Kliento vardas")
+    license_plate = m.CharField(verbose_name="Valstybiniai numeriai")
     vin_code = m.CharField(verbose_name="VIN", max_length=17)
 
+    class Meta:
+        verbose_name = "Automobilis"
+        verbose_name_plural = "Automobiliai"
+
     def __str__(self):
-        return (f"{self.make} {self.model} {self.license_plate}")
+        return (f"{self.make} {self.model}")
 
 class Uzsakymas(m.Model):
-    uuid = m.UUIDField(default=uuid.uuid4)
-    date = m.DateField(verbose_name="Užsakymo data", null=True, blank=True)
+    date = m.DateTimeField(verbose_name="Užsakymo data", auto_now_add=True)
     car = m.ForeignKey(to="Automobilis", verbose_name="Klientas", 
-                       on_delete=m.SET_NULL, null=True, blank=True)
-    
+                       on_delete=m.SET_NULL, null=True, blank=True,
+                       )
+    def total(self):
+        print(self.order.all())
+            
+        
+    class Meta:
+        verbose_name = "Užsakymas"
+        verbose_name_plural = "Užsakymai"
+
     def __str__(self):
-        return (f"{self.uuid}")
+        return (f"{self.car} - {self.date}")
     
 class UzsakymasInstance(m.Model):
     uzsakymas = m.ForeignKey(to="Uzsakymas", verbose_name="Užsakymas", 
-                             on_delete=m.CASCADE)
-    # paslauga = m.ManyToManyField(to="Paslauga", verbose_name="Paslaugos")
+                             on_delete=m.CASCADE, related_name="order")
     paslauga = m.ForeignKey(to="Paslauga", verbose_name="Paslauga",
-                            on_delete=m.SET_NULL, null=True, blank=True)
-    kiekis = m.CharField(verbose_name="Kiekis", max_length=1, default=0)
-
+                            on_delete=m.SET_NULL, null=True, blank=True,
+                            related_name="uz")
+    kiekis = m.IntegerField(verbose_name="Kiekis")
     UZSAKYMO_STATUSAS = (
         ('a', "Atlikta"),
         ('r', "Ruošiama"),
         ('n', "Nepradėta"),
     )
-
     statusas = m.CharField(verbose_name="Būsena", max_length=1, 
                            choices=UZSAKYMO_STATUSAS, default="n", blank=True)
+    
+    def line_sum(self):
+        return self.kiekis * self.paslauga.price
+    
+    line_sum.short_description = "Suma \u20ac"
+
+    class Meta:
+        verbose_name = "Užsakymo forma"
+        verbose_name_plural = "Užsakymo formos"
 
     def __str__(self):
-        return (f" {self.uzsakymas.uuid} {self.paslauga} {self.kiekis}vnt")
+        return (f" {self.paslauga} {self.kiekis}vnt")
