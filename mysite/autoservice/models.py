@@ -33,9 +33,13 @@ class Uzsakymas(m.Model):
                        on_delete=m.SET_NULL, null=True, blank=True,
                        )
     def total(self):
-        print(self.order.all())
-            
-        
+        result = 0
+        for line in self.lines.all():
+            result += line.line_sum()
+        return result
+    
+    total.short_description = "Viso \u20ac"
+               
     class Meta:
         verbose_name = "Užsakymas"
         verbose_name_plural = "Užsakymai"
@@ -43,13 +47,6 @@ class Uzsakymas(m.Model):
     def __str__(self):
         return (f"{self.car} - {self.date}")
     
-class UzsakymasInstance(m.Model):
-    uzsakymas = m.ForeignKey(to="Uzsakymas", verbose_name="Užsakymas", 
-                             on_delete=m.CASCADE, related_name="order")
-    paslauga = m.ForeignKey(to="Paslauga", verbose_name="Paslauga",
-                            on_delete=m.SET_NULL, null=True, blank=True,
-                            related_name="uz")
-    kiekis = m.IntegerField(verbose_name="Kiekis")
     UZSAKYMO_STATUSAS = (
         ('a', "Atlikta"),
         ('r', "Ruošiama"),
@@ -57,6 +54,14 @@ class UzsakymasInstance(m.Model):
     )
     statusas = m.CharField(verbose_name="Būsena", max_length=1, 
                            choices=UZSAKYMO_STATUSAS, default="n", blank=True)
+
+class UzsakymasInstance(m.Model):
+    uzsakymas = m.ForeignKey(to="Uzsakymas", verbose_name="Užsakymas", 
+                             on_delete=m.CASCADE, related_name="lines")
+    paslauga = m.ForeignKey(to="Paslauga", verbose_name="Paslauga",
+                            on_delete=m.SET_NULL, null=True, blank=True,
+                            related_name="uz")
+    kiekis = m.IntegerField(verbose_name="Kiekis")
     
     def line_sum(self):
         return self.kiekis * self.paslauga.price
@@ -64,8 +69,8 @@ class UzsakymasInstance(m.Model):
     line_sum.short_description = "Suma \u20ac"
 
     class Meta:
-        verbose_name = "Užsakymo forma"
-        verbose_name_plural = "Užsakymo formos"
+        verbose_name = "Užsakymo eilutė"
+        verbose_name_plural = "Užsakymo eilutės"
 
     def __str__(self):
         return (f" {self.paslauga} {self.kiekis}vnt")
