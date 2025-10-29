@@ -24,6 +24,10 @@ class Automobilis(m.Model):
         verbose_name = "Automobilis"
         verbose_name_plural = "Automobiliai"
 
+    def filled_id(self):
+        return str(self.id).zfill(6)
+
+
     def __str__(self):
         return (f"{self.make} {self.model}")
 
@@ -45,12 +49,14 @@ class Uzsakymas(m.Model):
         verbose_name_plural = "Užsakymai"
 
     def __str__(self):
-        return (f"{self.car} - {self.date}")
+        return (f"ID: {str(self.id).zfill(6)} {self.car} - {self.date.strftime('%Y-%m-%d %H:%M')}")
     
     UZSAKYMO_STATUSAS = (
         ('a', "Atlikta"),
         ('r', "Ruošiama"),
         ('n', "Nepradėta"),
+        ('s', "Sustabdyta"),
+        ('c', "Atšaukta"),
     )
     statusas = m.CharField(verbose_name="Būsena", max_length=1, 
                            choices=UZSAKYMO_STATUSAS, default="n", blank=True)

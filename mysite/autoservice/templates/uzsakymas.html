@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Užsakymas{% endblock %}
+
+{% block content %}
+<h2>Info apie užsakymą:</h2>
+<hr>
+<p>{{ uzsakymas }}</p>
+<p>Klientas: <strong>{{ uzsakymas.car.client.title }}</strong></p>
+<p>Valstybiniai numeriai: <strong>{{ uzsakymas.car.license_plate }}</strong></p>
+<p>VIN: <strong>{{ uzsakymas.car.vin_code }}</strong></p>
+<p>Užsakymo suma: <strong>&euro;{{ uzsakymas.total | floatformat:2 }}</strong></p>
+<p>Užsakymo statusas: 
+    <span class="{% if uzsakymas.statusas == 'a' %}text-success
+        {% elif uzsakymas.statusas == 'r' %}text-info
+        {% elif uzsakymas.statusas == 'n' %}text-warning
+        {% elif uzsakymas.statusas == 's' %}text-danger
+        {% elif uzsakymas.statusas == 'c' %}text-mute{% endif %}">
+        <strong>{{ uzsakymas.get_statusas_display }}</strong>
+    </span>
+</p>
+<hr>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Paslauga</th>
+            <th>Kiekis</th>
+            <th>Kaina</th>
+        </tr>
+    </thead>
+    {% for uzsakymas in uzsakymas.lines.all %}
+    <tbody>
+        <tr>
+            <td>{{ uzsakymas.paslauga.name | capfirst }}</td>
+            <td>{{ uzsakymas.kiekis }}</td>
+            <td>&euro;{{ uzsakymas.line_sum | floatformat:2 }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
+{% endblock %}

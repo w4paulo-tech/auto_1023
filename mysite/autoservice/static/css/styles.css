@@ -5,3 +5,12 @@ h2 {
 li { 
     font-size: 1.25rem;
 }
+
+p {
+    font-size: 1.10rem;
+    /* margin-left: 20px; */
+}
+
+hr {
+    margin-top: 10px;
+}

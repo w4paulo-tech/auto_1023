@@ -30,7 +30,7 @@ class EiluteAdmin(a.ModelAdmin):
     readonly_fields = ['line_sum']
 
     fieldsets = [
-        ('Gneral', {'fields': ('uzsakymas', 'paslauga', 'kiekis', 'line_sum')}),
+        ('General', {'fields': ('uzsakymas', 'paslauga', 'kiekis', 'line_sum')}),
     ]
 a.site.register(Paslauga, PaslaugaAdmin)
 a.site.register(Automobilis, AutomobilisAdmin)

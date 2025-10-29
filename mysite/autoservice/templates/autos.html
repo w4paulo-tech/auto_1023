@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Automobiliai{% endblock %}
+
+{% block content %}
+<h2>Automobiliai</h2>
+<hr>
+<p>Servise užregistruotų automobilių sąrašas:</p>
+{% for auto in automobiliai %}
+<p class="mx-3">
+    <a href="{% url 'automobilis' auto.id %}">
+    ID: {{ auto.filled_id }} {{ auto }}
+</p>
+{% endfor %}
+{% endblock %}
