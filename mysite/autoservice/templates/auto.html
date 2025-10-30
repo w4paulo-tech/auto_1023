@@ -14,11 +14,11 @@
             <p>Valstybinis numeris: <b>{{ auto.license_plate }}</b></p>
             <p>VIN: <b>{{ auto.vin_code }}</b></p>
         </div>
-        <div class="col-7">
+        <div class="col-7 ">
             {% if auto.cover %}
-            <img class="card-img-top" style="max-width: 500px" src="{{ auto.cover.url }}">
+            <img class="card-img-top rounded" style="max-width: 500px" src="{{ auto.cover.url }}">
             {% else %}
-            <img class="card-img-top" style="max-width: 500px" src="{% static 'img/no-image.jpg' %}">
+            <img class="card-img-top rounded" style="max-width: 500px" src="{% static 'img/no-image.jpg' %}">
             {% endif %}
         </div>
     </div>
