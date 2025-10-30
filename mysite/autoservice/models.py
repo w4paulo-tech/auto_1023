@@ -19,6 +19,8 @@ class Automobilis(m.Model):
     client = m.CharField(verbose_name="Kliento vardas")
     license_plate = m.CharField(verbose_name="Valstybiniai numeriai")
     vin_code = m.CharField(verbose_name="VIN", max_length=17)
+    cover = m.ImageField(verbose_name="Viršelis", upload_to="covers",
+                         null=True, blank=True)
 
     class Meta:
         verbose_name = "Automobilis"
