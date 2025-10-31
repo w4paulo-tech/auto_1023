@@ -31,7 +31,7 @@ class Automobilis(m.Model):
 
 
     def __str__(self):
-        return (f"{self.make} {self.model}")
+        return (f"{self.filled_id()} {self.make} {self.model}")
 
 class Uzsakymas(m.Model):
     date = m.DateTimeField(verbose_name="Užsakymo data", auto_now_add=True)

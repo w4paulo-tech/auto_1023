@@ -1,0 +1,39 @@
+{% if page_obj.has_other_pages %}
+<div class="container mt-5">
+  <nav aria-label="...">
+    <ul class="pagination pagination-sm justify-content-center"> 
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Atgal</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Atgal</span>
+        </li>
+      {% endif %} 
+
+      {% for car in page_obj.paginator.page_range %}
+        {% if page_obj.number == car %}
+          <li class="page-item active">
+            <a class="page-link">{{ car }}</a>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ car }}">{{ car }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Pirmyn</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Pirmyn</span>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+{% endif %}

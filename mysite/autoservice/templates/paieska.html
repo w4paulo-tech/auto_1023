@@ -3,12 +3,16 @@
 {% block title %}Paieška{% endblock %}
 
 {% block content %}
+{% load static %}
+
 <h2>Paieškos rezultatai:</h2>
 <hr>
 <p>Rezultatai pagal paieška: "<b>{{ query }}</b>"</p>
-{% for auto in autos %}
-<p class="mx-3"><a href="{% url 'automobilis' auto.pk %}">{{ auto }}</a></p>
-{% empty %}
-<p class="mx-3">Įrašų nerasta</p>
-{% endfor %}
+<div class="row">
+  {% for auto in autos %}
+    {% include "cover.html" %}
+  {% empty %}
+    <p class="mx-3">Įrašų nerasta</p>
+  {% endfor %}
+</div>
 {% endblock %}

@@ -4,68 +4,14 @@
 
 {% block content %}
 {% load static %}
+
 <h2>Automobiliai</h2>
 <hr>
 <p>Servise užregistruotų automobilių sąrašas:</p>
 <div class="row">
-    {% for auto in automobiliai %}
-    <div class="col-md-4 d-flex align-items-stretch">
-        <div class="card img-fluid mb-3 " style="width:400px">
-            <a href="{% url 'automobilis' auto.id %}">
-            {% if auto.cover %}
-            <img src="{{ auto.cover.url }}" class="card-img-top" alt="Card image">
-            {% else %}
-            <img src="{% static 'img/no-image.jpg' %}" class="card-img-top">
-            {% endif %}
-            <div class="card-img-overlay d-flex flex-column justify-content-end ">
-                <p class="card-subtitle bg-secondary text-white ps-2 pb-1 shadow rounded-pill" 
-                style="--bs-bg-opacity: .8; border:2px solid rgb(0, 0, 0);">
-                ID: {{ auto.filled_id }} {{ auto }}
-                </p>
-            </div>
-            </a>
-        </div>
-    </div>
-    {% endfor %}
+  {% for auto in automobiliai %}
+    {% include "cover.html" %}
+  {% endfor %}
 </div>
-
-{% if automobiliai.has_other_pages %}
-<div class="container mt-5">
-    <nav aria-label="...">
-        <ul class="pagination pagination-sm justify-content-center"> 
-            {% if automobiliai.has_previous %}
-            <li class="page-item">
-                 <a class="page-link" href="?page={{ automobiliai.previous_page_number }}">Pirmesnis</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Pirmesnis</span>
-            </li>
-            {% endif %} 
-
-            {% for car in automobiliai.paginator.page_range %}
-            {% if automobiliai.number == car %}
-                <li class="page-item active">
-                    <a class="page-link">{{ car }}</a>
-                </li>
-            {% else %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ car }}">{{ car }}</a>
-                </li>
-            {% endif %}
-            {% endfor %}
-
-            {% if automobiliai.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ automobiliai.next_page_number }}">Sekantis</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Sekantis</span>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-</div>
-{% endif %}
+{% include "paginator.html" with page_obj=automobiliai %}
 {% endblock %}

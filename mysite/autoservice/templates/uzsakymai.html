@@ -7,42 +7,7 @@
 <hr>
 <p>Visi serviso užsakymai:</p>
 {% for uzsakymas in uzsakymai %}
-<p class="mx-3"><a href="{{ uzsakymas.pk }}">{{ uzsakymas }}</a></p>
+  <p class="mx-3"><a href="{{ uzsakymas.pk }}">{{ uzsakymas }}</a></p>
 {% endfor %}
-{% if is_paginated %}
-<ul class="pagination pagination-sm justify-content-center mt-5">
-    {% if page_obj.has_previous %}
-    <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Pirmesnis</a>
-    </li>
-    {% else %}
-    <li class="page-item disabled">
-        <span class="page-link">Pirmesnis</span>
-    </li>
-    {% endif %}
-
-    {% for num in paginator.page_range %}
-    {% if page_obj.number == num %}
-    <li class="page-item active">
-        <span class="page-link">{{ num }}</span>
-    </li>
-    {% else %}
-    <li class="page-item">
-        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-    </li>
-    {% endif %}
-    {% endfor %}
-
-    {% if page_obj.has_next %}
-    <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Sekantis</a>
-    </li>
-    {% else %}
-    <li class="page-item disabled">
-        <span class="page-link">Sekantis</span>
-    </li>
-    {% endif %}
-</ul>
-{% endif %}
+{% include "paginator.html" %}
 {% endblock %}
-

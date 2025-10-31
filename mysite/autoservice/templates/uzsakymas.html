@@ -5,41 +5,52 @@
 {% block content %}
 <h2>Info apie užsakymą:</h2>
 <hr>
-<p>{{ uzsakymas }}</p>
-<p>Klientas: <b>{{ uzsakymas.car.client.title }}</b></p>
-<p>Valstybiniai numeriai: <b>{{ uzsakymas.car.license_plate }}</b></p>
-<p>VIN: <b>{{ uzsakymas.car.vin_code }}</b></p>
-<p>Užsakymo suma: <b>&euro;{{ uzsakymas.total | floatformat:2 }}</b></p>
-<p>Užsakymo statusas: 
-    <span class="{% if uzsakymas.statusas == 'a' %}text-success
-        {% elif uzsakymas.statusas == 'r' %}text-info
-        {% elif uzsakymas.statusas == 'n' %}text-warning
-        {% elif uzsakymas.statusas == 's' %}text-danger
-        {% elif uzsakymas.statusas == 'c' %}text-mute{% endif %}">
-        <b>{{ uzsakymas.get_statusas_display }}</b>
-    </span>
-</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <p>ID: <b>{{ uzsakymas.car.filled_id }}</b></p>
+      <p>Užsakymo data: <b>{{ uzsakymas.date | date:"Y-m-d H:i" }}</b></p>
+      <p>Automobilis: <b>{{ uzsakymas.car.make }} {{ uzsakymas.car.model }}</b></p>
+      <p>Klientas: <b>{{ uzsakymas.car.client.title }}</b></p>
+      <p>Valstybiniai numeriai: <b>{{ uzsakymas.car.license_plate }}</b></p>
+      <p>VIN: <b>{{ uzsakymas.car.vin_code }}</b></p>
+      <p>Užsakymo suma: <b>&euro;{{ uzsakymas.total | floatformat:2 }}</b></p>
+      <p>Užsakymo statusas: 
+        <span class="{% if uzsakymas.statusas == 'a' %}text-success
+            {% elif uzsakymas.statusas == 'r' %}text-info
+            {% elif uzsakymas.statusas == 'n' %}text-warning
+            {% elif uzsakymas.statusas == 's' %}text-danger
+            {% elif uzsakymas.statusas == 'c' %}text-secondary{% endif %}">
+          <b><u>{{ uzsakymas.get_statusas_display }}</u></b>
+        </span>
+      </p>
+    </div>
+    <div class="col-md-6 col-sm-12 pb-3 ">
+      {% include "image.html" with auto=uzsakymas.car%}
+    </div>
+  </div>
+</div>
 <hr>
 <table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Paslauga</th>
-            <th>Kaina</th>
-            <th>Kiekis</th>
-            <th>Suma</th>
-        </tr>
-    </thead>
+  <thead>
+    <tr>
+      <th>Paslauga</th>
+      <th>Kaina</th>
+      <th>Kiekis</th>
+      <th>Suma</th>
+    </tr>
+  </thead>
     {% for uzsakymas in uzsakymas.lines.all %}
-    <tbody>
-        <tr>
-            <td>{{ uzsakymas.paslauga.name | capfirst }}</td>
-            <td>&euro;{{ uzsakymas.paslauga.price | floatformat:2 }}</td>
-            <td>{{ uzsakymas.kiekis }}</td>
-            <td>&euro;{{ uzsakymas.line_sum | floatformat:2 }}</td>
-        </tr>
-        {% endfor %}
-            <th colspan="3">Bendra suma:</th>
-            <th>&euro;{{ uzsakymas.total | floatformat:2 }}</th>
-    </tbody>
+  <tbody>
+    <tr>
+      <td>{{ uzsakymas.paslauga.name | capfirst }}</td>
+      <td>&euro;{{ uzsakymas.paslauga.price | floatformat:2 }}</td>
+      <td>{{ uzsakymas.kiekis }}</td>
+      <td>&euro;{{ uzsakymas.line_sum | floatformat:2 }}</td>
+    </tr>
+    {% endfor %}
+      <th colspan="3">Bendra suma:</th>
+      <th>&euro;{{ uzsakymas.total | floatformat:2 }}</th>
+  </tbody>
 </table>
 {% endblock %}

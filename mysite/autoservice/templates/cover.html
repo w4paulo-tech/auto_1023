@@ -1,0 +1,20 @@
+{% load static %}
+
+<div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch">
+  <div class="card img-fluid mb-3 " style="width:400px">
+    <a href="{% url 'automobilis' auto.id %}">
+      {% if auto.cover %}
+        <img src="{{ auto.cover.url }}" class="card-img-top" alt="Card image">
+      {% else %}
+        <img src="{% static 'img/no-image.jpg' %}" class="card-img-top">
+      {% endif %}
+        <div class="card-img-overlay d-flex flex-column justify-content-end ">
+          <p class="card-subtitle bg-secondary text-white ps-2 pb-1 shadow rounded-pill" 
+              style="--bs-bg-opacity: .8; border:2px solid rgb(0, 0, 0);">
+              ID: {{ auto.filled_id }} {{ auto }}
+          </p>
+        </div>
+    </a>
+  </div>
+</div>
+

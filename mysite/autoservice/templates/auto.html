@@ -4,23 +4,20 @@
 
 {% block content %}
 {% load static %}
+
 <h2>Info apie automobilį:</h2>
 <hr>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-5">
-            <p>Savininkas: <b>{{ auto.client }}</b></p>
-            <p>Automobilio modelis: <b>{{ auto.make }} {{ auto.model }}</b></p>
-            <p>Valstybinis numeris: <b>{{ auto.license_plate }}</b></p>
-            <p>VIN: <b>{{ auto.vin_code }}</b></p>
-        </div>
-        <div class="col-7 ">
-            {% if auto.cover %}
-            <img class="card-img-top rounded" style="max-width: 500px" src="{{ auto.cover.url }}">
-            {% else %}
-            <img class="card-img-top rounded" style="max-width: 500px" src="{% static 'img/no-image.jpg' %}">
-            {% endif %}
-        </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <p>Savininkas: <b>{{ auto.client }}</b></p>
+      <p>Automobilio modelis: <b>{{ auto.make }} {{ auto.model }}</b></p>
+      <p>Valstybinis numeris: <b>{{ auto.license_plate }}</b></p>
+      <p>VIN: <b>{{ auto.vin_code }}</b></p>
     </div>
+    <div class="col-md-6 col-sm-12">
+      {% include "image.html" %}
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -1,0 +1,7 @@
+{% load static %}
+
+{% if auto.cover %}
+  <img class="card-img-top rounded" style="max-width: 500px" src="{{ auto.cover.url }}">
+{% else %}
+  <img class="card-img-top rounded" style="max-width: 500px" src="{% static 'img/no-image.jpg' %}">
+{% endif %}
