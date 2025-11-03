@@ -51,7 +51,7 @@ class Uzsakymas(m.Model):
         verbose_name_plural = "Užsakymai"
 
     def __str__(self):
-        return (f"ID: {str(self.id).zfill(6)} {self.car} - {self.date.strftime('%Y-%m-%d %H:%M')}")
+        return (f"ID: {self.car} - {self.date.strftime('%Y-%m-%d %H:%M')}")
     
     UZSAKYMO_STATUSAS = (
         ('a', "Atlikta"),
