@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mynavbar">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'index' %}">PRADŽIA</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'automobiliai' %}">Automobiliai</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'uzsakymai' %}">Užsakymai</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link">
+            <i class="bi bi-person-circle"></i>
+            {{ user.username }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="nav-link" type="submit">Atsijungti</button> 
+          </form>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Prisijungti</a>
+        </li>
+        {% endif %}
+        <form action="{% url 'paieska' %}" method="get" class="d-flex ms-auto">
+          <input name="query" class="form-control" type="text" placeholder="Paieška">
+        </form>    
+      </ul>
+    </div>
+  </div>
+</nav>

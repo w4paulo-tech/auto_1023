@@ -5,9 +5,10 @@
 {% block content %}
 <h2>Šiuo metu pas mus yra:</h2>
 <hr>
-<ul>
+<ul class="mx-3">
   <li>Teikiamų paslaugų: {{ num_paslaugos }}</li>
   <li>Atliktų užsakymų: {{ num_atlikti_uzsakymai}}</li>
   <li>Registruotų automobilių: {{num_automobiliai}}</li>
-</ul>    
+</ul>
+<p>Čia jūs lankotės {{ num_visits }}-ą kartą.</p>   
 {% endblock %}

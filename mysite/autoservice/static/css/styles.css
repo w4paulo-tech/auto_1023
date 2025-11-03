@@ -2,14 +2,14 @@ h2 {
     color: red;
 }
 
-li { 
-    font-size: 1.25rem;
+/* ul { 
+    font-size: 20px;
 }
 
-p {
-    font-size: 1.10rem;
-    /* margin-left: 20px; */
-}
+.container.mt-2 p {
+    font-size: 20px;
+    margin-left: 20px;
+} */
 
 hr {
     margin-top: 10px;
