@@ -12,14 +12,14 @@
         </li>
       {% endif %} 
 
-      {% for car in page_obj.paginator.page_range %}
-        {% if page_obj.number == car %}
+      {% for obj in page_obj.paginator.page_range %}
+        {% if page_obj.number == obj %}
           <li class="page-item active">
-            <a class="page-link">{{ car }}</a>
+            <a class="page-link">{{ obj }}</a>
           </li>
         {% else %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ car }}">{{ car }}</a>
+            <a class="page-link" href="?page={{ obj }}">{{ obj }}</a>
           </li>
         {% endif %}
       {% endfor %}

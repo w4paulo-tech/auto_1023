@@ -10,10 +10,10 @@
 <p>Rezultatai pagal paieška: "<b>{{ query }}</b>"</p>
 <div class="row">
   {% for auto in autos %}
-    {% include "cover.html" %}
+  {% include "cover.html" %}
   {% empty %}
-    <p class="mx-3">Įrašų nerasta</p>
+  <p class="mx-3">Įrašų nerasta</p>
   {% endfor %}
 </div>
-<!-- {% include "paginator.html" with page_obj=search %} -->
+{% include "paginator.html" with page_obj=autos %}
 {% endblock %}

@@ -15,29 +15,36 @@
           <a class="nav-link" href="{% url 'uzsakymai' %}">Užsakymai</a>
         </li>
       </ul>
-      <ul class="navbar-nav ms-auto">
+      </div>
+      <div class="navbar-nav ms-auto">
         {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
             <i class="bi bi-person-circle"></i>
             {{ user.username }}
           </a>
-        </li>
-        <li class="nav-item">
-          <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button class="nav-link" type="submit">Atsijungti</button> 
+          <ul class="dropdown-menu bg-success">
+            <li>
+              <a class="dropdown-item text-white bg-success" href="{% url 'manouzsakymai' %}">Mano Užsakymai</a>
+            </li>
+            <li>
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="dropdown-item text-white bg-success" type="submit">Atsijungti</button> 
+              </form>
+            </li>
+        {% else %}
+          <li>
+            <a class="nav-link" href="{% url 'login' %}">Prisijungti</a>
+          </li>
+        {% endif %}     
+        </ul> 
+        <li>
+          <form action="{% url 'paieska' %}" method="get" class=" me-auto">
+            <input name="query" class="form-control" type="text" placeholder="Paieška">
           </form>
         </li>
-        {% else %}
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Prisijungti</a>
-        </li>
-        {% endif %}
-        <form action="{% url 'paieska' %}" method="get" class="d-flex ms-auto">
-          <input name="query" class="form-control" type="text" placeholder="Paieška">
-        </form>    
-      </ul>
-    </div>
+      </li>  
+  </div>
   </div>
 </nav>

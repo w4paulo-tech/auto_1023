@@ -9,11 +9,11 @@ class EiluteInLine(a.TabularInline):
     readonly_fields = ['line_sum']
 
 class UzsakymasAdmin(a.ModelAdmin):
-    list_display = ['car', 'date', 'total', 'statusas']
+    list_display = ['car', 'date', 'due_back', 'total', 'statusas', 'user']
     inlines = [EiluteInLine]
     readonly_fields = ['date', 'total']
     fieldsets = [
-        ('General', {'fields': ('car', 'date', 'total', 'statusas')}),
+        ('General', {'fields': ('car', 'date', 'due_back', 'total', 'statusas', 'user')}),
     ]
 
 class AutomobilisAdmin(a.ModelAdmin):

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Mano užsakymai{% endblock %}
+
+{% block content %}
+<h2>Mano užsakymai</h2>
+<hr>
+{% for instance in instances %}
+<p class="mx-3">
+    <a href="{% url 'uzsakymas' instance.pk %}">{{ instance.car }}</a>
+    Užsakymas bus atliktas iki: 
+    <span class="{% if instance.due_date %}text-danger{% endif %}">{{ instance.due_back | date:"Y-m-d" }}</span>
+</p>
+{% endfor %}
+{% include "paginator.html" %}
+{% endblock %}

@@ -1,5 +1,9 @@
 from django.db import models as m
 import uuid
+from django.contrib.auth.models import User
+from django.utils import timezone
+from tinymce.models import HTMLField
+
 
 class Paslauga(m.Model):
     name = m.CharField(verbose_name="Paslaugos tipas")
@@ -21,6 +25,8 @@ class Automobilis(m.Model):
     vin_code = m.CharField(verbose_name="VIN", max_length=17)
     cover = m.ImageField(verbose_name="Viršelis", upload_to="covers",
                          null=True, blank=True)
+    description = HTMLField(verbose_name="Aprašymas", max_length=3000, default="")
+
 
     class Meta:
         verbose_name = "Automobilis"
@@ -38,6 +44,13 @@ class Uzsakymas(m.Model):
     car = m.ForeignKey(to="Automobilis", verbose_name="Klientas", 
                        on_delete=m.SET_NULL, null=True, blank=True,
                        )
+    user = m.ForeignKey(to=User, verbose_name="Vartotojas", 
+                        on_delete=m.SET_NULL, null=True, blank=True)
+    due_back = m.DateField(verbose_name="Grąžinimo data", null=True, blank=True)
+    
+    def due_date(self):
+        return self.due_back and timezone.now().date() > self.due_back
+    
     def total(self):
         result = 0
         for line in self.lines.all():
