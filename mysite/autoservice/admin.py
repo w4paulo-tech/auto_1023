@@ -1,5 +1,5 @@
 from django.contrib import admin as a
-from .models import Paslauga, Automobilis, Uzsakymas, UzsakymasInstance as Eilute
+from .models import Paslauga, Automobilis, Uzsakymas, UzsakymasInstance as Eilute, Komentaras
 
 class EiluteInLine(a.TabularInline):
     model = Eilute
@@ -13,7 +13,8 @@ class UzsakymasAdmin(a.ModelAdmin):
     inlines = [EiluteInLine]
     readonly_fields = ['date', 'total']
     fieldsets = [
-        ('General', {'fields': ('car', 'date', 'due_back', 'total', 'statusas', 'user')}),
+        ('General', {'fields': ('car', 'date', 'due_back', 
+                                'total', 'statusas', 'user')}),
     ]
 
 class AutomobilisAdmin(a.ModelAdmin):
@@ -32,6 +33,11 @@ class EiluteAdmin(a.ModelAdmin):
     fieldsets = [
         ('General', {'fields': ('uzsakymas', 'paslauga', 'kiekis', 'line_sum')}),
     ]
+
+class KomentarasAdmin(a.ModelAdmin):
+    list_display = ['uzsakymas', 'komentatorius', 'sukurta', 'turinys']
+
+a.site.register(Komentaras, KomentarasAdmin)
 a.site.register(Paslauga, PaslaugaAdmin)
 a.site.register(Automobilis, AutomobilisAdmin)
 a.site.register(Uzsakymas, UzsakymasAdmin)

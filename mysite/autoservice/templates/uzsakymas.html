@@ -10,6 +10,7 @@
     <div class="col-md-6 col-sm-12">
       <p>ID: <b>{{ uzsakymas.car.filled_id }}</b></p>
       <p>Užsakymo data: <b>{{ uzsakymas.date | date:"Y-m-d H:i" }}</b></p>
+      <p>Terminas: <b>{{ uzsakymas.due_back | date:"Y-m-d" }}</b></p>
       <p>Automobilis: <b>{{ uzsakymas.car.make }} {{ uzsakymas.car.model }}</b></p>
       <p>Klientas: <b>{{ uzsakymas.car.client.title }}</b></p>
       <p>Valstybiniai numeriai: <b>{{ uzsakymas.car.license_plate }}</b></p>
@@ -53,4 +54,22 @@
     <th>&euro;{{ uzsakymas.total | floatformat:2 }}</th>
   </tbody>
 </table>
+
+<h2>Komentarai</h2>
+<hr>
+{% for komentaras in uzsakymas.komentaras.all %}
+<p><strong>{{ komentaras.komentatorius }}</strong>, <em>{{ komentaras.sukurta }}</em></p>
+<p>{{ komentaras.turinys }}</p>
+{% empty %}
+<p>Komentarų nėra</p>
+{% endfor %}
+{% if user.is_authenticated %}
+<p>Įveskite papildomą užsakymo komentarą:
+<form method="post" class="mb-2">
+  {% csrf_token %}
+  {% load crispy_forms_tags %}
+  {{ form | crispy }}
+  <button type="submit" class="btn btn-success">Pateikti</button>
+</form></p>
+{% endif %}
 {% endblock %}

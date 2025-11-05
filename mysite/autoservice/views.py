@@ -1,10 +1,14 @@
-from django.shortcuts import render
 from .models import Paslauga, Uzsakymas, Automobilis, UzsakymasInstance as Eilute
+from .forms import KomentarasForm
+from django.shortcuts import render, reverse
 from django.views import generic
+from django.views.generic.edit import FormMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 
 def index(request):
     num_visits = request.session.get('num_visits', 1)
@@ -53,10 +57,28 @@ class ManoEiluteListView(LoginRequiredMixin, generic.ListView):
         return Uzsakymas.objects.filter(user=self.request.user)
 
 
-class UzsakymasDetailView(generic.DetailView):
+class UzsakymasDetailView(FormMixin, generic.DetailView):
     model = Uzsakymas
     template_name = "uzsakymas.html"
     context_object_name = "uzsakymas"
+    form_class = KomentarasForm
+
+    def get_success_url(self):
+        return reverse("uzsakymas", kwargs={"pk": self.get_object().pk}) 
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+        
+    def form_valid(self, form):
+        form.instance.uzsakymas = self.get_object()
+        form.instance.komentatorius = self.request.user
+        form.save()
+        return super().form_valid(form)
 
 my_query = ""    
 
@@ -82,3 +104,8 @@ def paieska(request):
         "search": paged_search,
     }
     return render(request, template_name="paieska.html", context=context)
+
+class SignUp(generic.CreateView):
+    form_class = UserCreationForm
+    template_name = "signup.html"
+    success_url = reverse_lazy("login")

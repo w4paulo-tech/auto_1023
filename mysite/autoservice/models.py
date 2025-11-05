@@ -7,9 +7,8 @@ from tinymce.models import HTMLField
 
 class Paslauga(m.Model):
     name = m.CharField(verbose_name="Paslaugos tipas")
-    price = m.FloatField(verbose_name="Paslaugos kaina \u20ac", 
-                         )
-
+    price = m.FloatField(verbose_name="Paslaugos kaina \u20ac",)
+    
     class Meta:
         verbose_name = "Paslauga"
         verbose_name_plural = "Paslaugos"
@@ -23,10 +22,10 @@ class Automobilis(m.Model):
     client = m.CharField(verbose_name="Kliento vardas")
     license_plate = m.CharField(verbose_name="Valstybiniai numeriai")
     vin_code = m.CharField(verbose_name="VIN", max_length=17)
-    cover = m.ImageField(verbose_name="Viršelis", upload_to="covers",
+    cover = m.ImageField(verbose_name="Viršelis", 
+                         upload_to="covers",
                          null=True, blank=True)
-    description = HTMLField(verbose_name="Aprašymas", max_length=3000, default="")
-
+    description = HTMLField(verbose_name="Aprašymas", default="")
 
     class Meta:
         verbose_name = "Automobilis"
@@ -35,16 +34,17 @@ class Automobilis(m.Model):
     def filled_id(self):
         return str(self.id).zfill(6)
 
-
     def __str__(self):
         return (f"{self.filled_id()} {self.make} {self.model}")
 
 class Uzsakymas(m.Model):
-    date = m.DateTimeField(verbose_name="Užsakymo data", auto_now_add=True)
-    car = m.ForeignKey(to="Automobilis", verbose_name="Klientas", 
-                       on_delete=m.SET_NULL, null=True, blank=True,
-                       )
-    user = m.ForeignKey(to=User, verbose_name="Vartotojas", 
+    date = m.DateTimeField(verbose_name="Užsakymo data", 
+                           auto_now_add=True)
+    car = m.ForeignKey(to="Automobilis", 
+                       verbose_name="Klientas", 
+                       on_delete=m.SET_NULL, null=True, blank=True,)
+    user = m.ForeignKey(to=User, 
+                        verbose_name="Vartotojas", 
                         on_delete=m.SET_NULL, null=True, blank=True)
     due_back = m.DateField(verbose_name="Grąžinimo data", null=True, blank=True)
     
@@ -73,13 +73,18 @@ class Uzsakymas(m.Model):
         ('s', "Sustabdyta"),
         ('c', "Atšaukta"),
     )
-    statusas = m.CharField(verbose_name="Būsena", max_length=1, 
-                           choices=UZSAKYMO_STATUSAS, default="n", blank=True)
+    statusas = m.CharField(verbose_name="Būsena", 
+                           max_length=1, 
+                           choices=UZSAKYMO_STATUSAS, 
+                           default="n", blank=True)
 
 class UzsakymasInstance(m.Model):
-    uzsakymas = m.ForeignKey(to="Uzsakymas", verbose_name="Užsakymas", 
-                             on_delete=m.CASCADE, related_name="lines")
-    paslauga = m.ForeignKey(to="Paslauga", verbose_name="Paslauga",
+    uzsakymas = m.ForeignKey(to="Uzsakymas", 
+                             verbose_name="Užsakymas", 
+                             on_delete=m.CASCADE, 
+                             related_name="lines")
+    paslauga = m.ForeignKey(to="Paslauga", 
+                            verbose_name="Paslauga",
                             on_delete=m.SET_NULL, null=True, blank=True,
                             related_name="uz")
     kiekis = m.IntegerField(verbose_name="Kiekis")
@@ -95,3 +100,20 @@ class UzsakymasInstance(m.Model):
 
     def __str__(self):
         return (f" {self.paslauga} {self.kiekis}vnt")
+
+class Komentaras(m.Model):
+    uzsakymas = m.ForeignKey(to="Uzsakymas",
+                             verbose_name="Užsakymas",
+                             on_delete=m.SET_NULL,
+                             null=True, blank=True,
+                             related_name="komentaras")
+    komentatorius = m.ForeignKey(to=User, 
+                                 verbose_name="Autorius",
+                                 on_delete=m.SET_NULL, null=True, blank=True)
+    sukurta = m.DateTimeField(verbose_name="Data", auto_now_add=True)
+    turinys = m.TextField(verbose_name="Tekstas")
+
+    class Meta:
+        verbose_name = "Komentaras"
+        verbose_name_plural = "Komentarai"
+        ordering = ['-pk']

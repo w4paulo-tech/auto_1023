@@ -9,7 +9,9 @@
 <p class="mx-3">
     <a href="{% url 'uzsakymas' instance.pk %}">{{ instance.car }}</a>
     Užsakymas bus atliktas iki: 
-    <span class="{% if instance.due_date %}text-danger{% endif %}">{{ instance.due_back | date:"Y-m-d" }}</span>
+    <span class="{% if instance.due_date %}text-danger{% endif %}">
+        {{ instance.due_back | date:"Y-m-d" }}
+    </span>
 </p>
 {% endfor %}
 {% include "paginator.html" %}

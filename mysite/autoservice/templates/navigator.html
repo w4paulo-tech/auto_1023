@@ -1,9 +1,10 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
   <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+    <button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="mynavbar">
+
+    <div class="collapse navbar-collapse order-2" id="mynavbar">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link" href="{% url 'index' %}">PRADŽIA</a>
@@ -15,13 +16,16 @@
           <a class="nav-link" href="{% url 'uzsakymai' %}">Užsakymai</a>
         </li>
       </ul>
-      </div>
-      <div class="navbar-nav ms-auto">
+    </div>
+
+    <div class="d-flex order-3">
+      <ul class="navbar-nav flex-row">
+        <li class="nav-item dropdown ms-auto">
         {% if user.is_authenticated %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+          <a class="nav-link dropdown-toggle ps-2 ms-auto" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-person-circle"></i>
             {{ user.username }}
+            
           </a>
           <ul class="dropdown-menu bg-success">
             <li>
@@ -33,18 +37,24 @@
                 <button class="dropdown-item text-white bg-success" type="submit">Atsijungti</button> 
               </form>
             </li>
+          </ul> 
         {% else %}
           <li>
-            <a class="nav-link" href="{% url 'login' %}">Prisijungti</a>
+            <a class="nav-link ps-1" href="{% url 'signup' %}">Registruotis</a>
+          </li>
+          <span class="navbar-text ps-1"><b> / </b></span>
+          <li>
+            <a class="nav-link ps-1" href="{% url 'login' %}">Prisijungti</a>
           </li>
         {% endif %}     
-        </ul> 
-        <li>
-          <form action="{% url 'paieska' %}" method="get" class=" me-auto">
-            <input name="query" class="form-control" type="text" placeholder="Paieška">
-          </form>
-        </li>
       </li>  
-  </div>
+      </ul>
+    </div>
+    
+      <li class="nav-item d-flex order-4 ms-auto mt-2 mt-sm-0">
+        <form action="{% url 'paieska' %}" method="get" class="me-auto d-flex">
+          <input name="query" class="form-control" type="text" placeholder="Paieška">
+        </form>
+      </li>
   </div>
 </nav>
