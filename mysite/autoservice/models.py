@@ -1,8 +1,9 @@
 from django.db import models as m
 import uuid
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.utils import timezone
 from tinymce.models import HTMLField
+from PIL import Image
 
 
 class Paslauga(m.Model):
@@ -43,7 +44,7 @@ class Uzsakymas(m.Model):
     car = m.ForeignKey(to="Automobilis", 
                        verbose_name="Klientas", 
                        on_delete=m.SET_NULL, null=True, blank=True,)
-    user = m.ForeignKey(to=User, 
+    user = m.ForeignKey(to="autoservice.CustomUser", 
                         verbose_name="Vartotojas", 
                         on_delete=m.SET_NULL, null=True, blank=True)
     due_back = m.DateField(verbose_name="Grąžinimo data", null=True, blank=True)
@@ -107,7 +108,7 @@ class Komentaras(m.Model):
                              on_delete=m.SET_NULL,
                              null=True, blank=True,
                              related_name="komentaras")
-    komentatorius = m.ForeignKey(to=User, 
+    komentatorius = m.ForeignKey(to="autoservice.CustomUser", 
                                  verbose_name="Autorius",
                                  on_delete=m.SET_NULL, null=True, blank=True)
     sukurta = m.DateTimeField(verbose_name="Data", auto_now_add=True)
@@ -117,3 +118,22 @@ class Komentaras(m.Model):
         verbose_name = "Komentaras"
         verbose_name_plural = "Komentarai"
         ordering = ['-pk']
+
+class CustomUser(AbstractUser):
+    photo = m.ImageField(upload_to="profile_pics", null=True, blank=True)
+    email = m.EmailField(unique=True, null=True, blank=True)
+    username = m.CharField(unique=True, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.photo:
+            img = Image.open(self.photo.path)
+            min_side = min(img.width, img.height)
+            left = (img.width - min_side) // 2
+            top = (img.height - min_side) // 2
+            right = left + min_side
+            bottom = top + min_side
+            img = img.crop((left, top, right, bottom))
+            img = img.resize((300, 300), Image.LANCZOS)
+            img.save(self.photo.path)
+

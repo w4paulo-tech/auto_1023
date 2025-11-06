@@ -20,29 +20,32 @@
 
     <div class="d-flex order-3">
       <ul class="navbar-nav flex-row">
-        <li class="nav-item dropdown ms-auto">
+        <li class="nav-item dropdown ms-auto ps-2">
         {% if user.is_authenticated %}
-          <a class="nav-link dropdown-toggle ps-2 ms-auto" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle ps-2 ms-auto" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-person-circle"></i>
             {{ user.username }}
             
           </a>
-          <ul class="dropdown-menu bg-success">
+          <ul class="dropdown-menu ">
             <li>
-              <a class="dropdown-item text-white bg-success" href="{% url 'manouzsakymai' %}">Mano Užsakymai</a>
+              <a class="dropdown-item text-white" href="{% url 'profile' %}">Mano Profilis</a>
+            </li>
+            <li>
+              <a class="dropdown-item text-white" href="{% url 'manouzsakymai' %}">Mano Užsakymai</a>
             </li>
             <li>
               <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
-                <button class="dropdown-item text-white bg-success" type="submit">Atsijungti</button> 
+                <button class="dropdown-item text-white" type="submit">Atsijungti</button> 
               </form>
             </li>
           </ul> 
         {% else %}
           <li>
-            <a class="nav-link ps-1" href="{% url 'signup' %}">Registruotis</a>
+            <a class="nav-link ps-1 pe-1" href="{% url 'signup' %}">Registruotis</a>
           </li>
-          <span class="navbar-text ps-1"><b> / </b></span>
+          <span class="navbar-text"><b> / </b></span>
           <li>
             <a class="nav-link ps-1" href="{% url 'login' %}">Prisijungti</a>
           </li>
@@ -51,7 +54,7 @@
       </ul>
     </div>
     
-      <li class="nav-item d-flex order-4 ms-auto mt-2 mt-sm-0">
+      <li class="nav-item d-flex order-4 ms-auto mt-2 mt-sm-1 mb-1 ps-2">
         <form action="{% url 'paieska' %}" method="get" class="me-auto d-flex">
           <input name="query" class="form-control" type="text" placeholder="Paieška">
         </form>

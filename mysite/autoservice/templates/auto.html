@@ -10,10 +10,10 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-6 col-sm-12">
-      <p>Savininkas: <b>{{ auto.client }}</b></p>
-      <p>Automobilio modelis: <b>{{ auto.make }} {{ auto.model }}</b></p>
-      <p>Valstybinis numeris: <b>{{ auto.license_plate }}</b></p>
-      <p>VIN: <b>{{ auto.vin_code }}</b></p>
+      <p><b>Savininkas:</b> {{ auto.client }}</p>
+      <p><b>Automobilio modelis:</b> {{ auto.make }} {{ auto.model }}</p>
+      <p><b>Valstybinis numeris:</b> {{ auto.license_plate }}</p>
+      <p><b>VIN:</b> {{ auto.vin_code }}</p>
     </div>
     <div class="col-md-6 col-sm-12">
       {% include "image.html" %}

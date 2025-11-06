@@ -1,6 +1,6 @@
 from .models import Paslauga, Uzsakymas, Automobilis, UzsakymasInstance as Eilute
-from .forms import KomentarasForm
-from django.shortcuts import render, reverse
+from .forms import KomentarasForm, CustomUserCreateForm, CustomUserUpdateForm
+from django.shortcuts import render, reverse, redirect
 from django.views import generic
 from django.views.generic.edit import FormMixin
 from django.core.paginator import Paginator
@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 def index(request):
     num_visits = request.session.get('num_visits', 1)
@@ -106,6 +107,15 @@ def paieska(request):
     return render(request, template_name="paieska.html", context=context)
 
 class SignUp(generic.CreateView):
-    form_class = UserCreationForm
+    form_class = CustomUserCreateForm
     template_name = "signup.html"
     success_url = reverse_lazy("login")
+
+class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = User
+    form_class = CustomUserUpdateForm
+    template_name = "profile.html"
+    success_url = reverse_lazy("profile")
+
+    def get_object(self):
+        return self.request.user

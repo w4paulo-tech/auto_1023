@@ -3,6 +3,7 @@
 {% block title %}Užsakymas{% endblock %}
 
 {% block content %}
+{% load static %}
 <h2>Info apie užsakymą:</h2>
 <hr>
 <div class="container-fluid">
@@ -58,7 +59,13 @@
 <h2>Komentarai</h2>
 <hr>
 {% for komentaras in uzsakymas.komentaras.all %}
-<p><strong>{{ komentaras.komentatorius }}</strong>, <em>{{ komentaras.sukurta }}</em></p>
+<p>
+  {% if komentaras.komentatorius.photo %}
+    <img src="{{ komentaras.komentatorius.photo.url }}" class="rounded-circle" style="width: 30px">
+  {% else %}
+    <img src="{% static 'img/no-profile.png' %}" class="rounded-circle" style="width: 30px">
+  {% endif %}
+  <strong>{{ komentaras.komentatorius }}</strong>, <em>{{ komentaras.sukurta }}</em></p>
 <p>{{ komentaras.turinys }}</p>
 {% empty %}
 <p>Komentarų nėra</p>

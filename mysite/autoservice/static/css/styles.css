@@ -15,10 +15,16 @@ hr {
     margin-top: 10px;
 }
 
+.dropdown-menu {
+    background-color: oklch(29.951% 0.09473 139.175 / 0.758);
+
+
+}
 
 .navbar a:hover {
     display: block;
-    background-color: oklch(88.45% 0.2427 141.115 / 0.144);
+    background-color: oklch(53.469% 0.077 138.761 / 0.19);
+    padding-left: 16px
 }
 
 @media (max-width: 767.98px) {
@@ -29,10 +35,10 @@ hr {
 }
 
 .navbar .navbar-nav.flex-row .nav-item.dropdown .dropdown-menu .dropdown-item:hover{
-      background-color: lab(25.59% -20.51 18.71 / 0.3);
+      background-color: lab(85.94% -77.82 76.96 / 0.559);
   
 }
 .navbar .navbar-nav.flex-row .nav-item.dropdown .dropdown-menu .dropdown-item:focus {
-    background-color: lab(25.59% -20.51 18.71 / 0.3);
+    background-color: lab(88.21% -81.76 80.93);
 
 }

@@ -10,5 +10,6 @@ urlpatterns = [
     path('paieska/', views.paieska, name='paieska'),
     path('manouzsakymai', views.ManoEiluteListView.as_view(), name='manouzsakymai'),
     path('signup/', views.SignUp.as_view(), name='signup'),
+    path('profile/', views.ProfileUpdateView.as_view(), name='profile')
     
 ]

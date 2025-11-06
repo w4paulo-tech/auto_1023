@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Vartotojo profilis{% endblock %}
+
+{% block content %}
+{% load static %}
+<h2>Mano Profilis</h2>
+<hr>
+<div class="row">
+  <div class="col-md-7">
+      <p><b>Vartotojo vardas: </b>{{ user.username }}</p>
+      <p><b>Vardas: </b>{{ user.first_name }}</p>
+      <p><b>Pavardė: </b>{{ user.last_name }}</p>
+      <p><b>El. pašto adresas: </b>{{ user.email }}</p>
+  </div>
+  <div class="col-md-5">
+    {% if user.photo %}
+    <img src="{{ user.photo.url }}" class="mb-4 rounded-circle" 
+    style="width: 300px; border:2px solid rgb(0, 0, 0);">
+    {% else %}
+    <img src="{% static 'img/no-profile.png' %}" class="mb-4 pt-2 rounded-circle" 
+    style="max-width: 200px">
+
+    {% endif %}
+  </div>
+</div>
+    <h2>Profilio atnaujinimas</h2>
+    <hr>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% load crispy_forms_tags %}
+      {{ form | crispy }}
+      <button type="submit" class="btn btn-success">Atnaujinti</button>
+    </form>
+
+{% endblock %}
