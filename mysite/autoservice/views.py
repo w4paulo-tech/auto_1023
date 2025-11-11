@@ -1,12 +1,13 @@
-from .models import Paslauga, Uzsakymas, Automobilis, UzsakymasInstance as Eilute
-from .forms import KomentarasForm, CustomUserCreateForm, CustomUserUpdateForm
+from .models import Paslauga, Uzsakymas, Automobilis, UzsakymasInstance as Eilute, CustomUser
+from .forms import (KomentarasForm, CustomUserCreateForm, CustomUserUpdateForm, 
+                    InstanceCreateUpdateForm)
 from django.shortcuts import render, reverse, redirect
 from django.views import generic
 from django.views.generic.edit import FormMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -41,7 +42,6 @@ def auto(request, automobilis_id):
     }
     return render(request, template_name="auto.html", context=context)
 
-
 class UzsakymasListView(LoginRequiredMixin, generic.ListView):
     model = Uzsakymas
     template_name = "uzsakymai.html"
@@ -55,8 +55,7 @@ class ManoEiluteListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     
     def get_queryset(self):
-        return Uzsakymas.objects.filter(user=self.request.user)
-
+        return Uzsakymas.objects.filter(user=self.request.user) 
 
 class UzsakymasDetailView(FormMixin, generic.DetailView):
     model = Uzsakymas
@@ -80,14 +79,17 @@ class UzsakymasDetailView(FormMixin, generic.DetailView):
         form.instance.komentatorius = self.request.user
         form.save()
         return super().form_valid(form)
-
+    
 my_query = ""    
 
 def paieska(request):
     query = request.GET.get('query')
-    global my_query
     if query:
+        global my_query
         my_query = query
+    else:
+        my_query = ""
+    
     auto_paieskos_rezultatai = Automobilis.objects.filter(
         Q(client__icontains=my_query) |
         Q(make__icontains=my_query) |
@@ -117,5 +119,104 @@ class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
     template_name = "profile.html"
     success_url = reverse_lazy("profile")
 
-    def get_object(self):
+    def get_object(self, queryset=...):
         return self.request.user
+    
+    def form_invalid(self, form):
+        self.request.user.refresh_from_db()
+        return self.render_to_response(self.get_context_data(form=form))
+
+class UzsakymasInstanceCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Uzsakymas
+    template_name = "uzsakymas_form.html"
+    form_class = InstanceCreateUpdateForm
+    success_url = reverse_lazy('manouzsakymai')
+
+    def get_success_url(self):
+        return reverse("uzsakymas", kwargs={"pk": self.object.pk})
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+class UzsakymasUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = Uzsakymas
+    template_name = "uzsakymas_form.html"
+    form_class = InstanceCreateUpdateForm
+    # success_url = reverse_lazy('manouzsakymai')
+    
+    def get_success_url(self):
+        return reverse("uzsakymas", kwargs={"pk": self.object.pk})
+
+    def test_func(self):
+        return self.get_object().user == self.request.user
+
+class UzsakymasDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = Uzsakymas
+    template_name = "uzsakymas_delete.html"
+    context_object_name = "uzsakymas"
+    success_url = reverse_lazy('manouzsakymai')
+
+    def test_func(self):
+        return self.get_object().user == self.request.user
+
+class PaslaugaCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    model = Eilute
+    template_name = "paslauga_form.html"
+    # form_class = PaslaugaKiekisForm
+    fields = ['paslauga', 'kiekis']
+    # success_url = reverse_lazy('manouzsakymai')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['uzsakymas_id'] = self.kwargs['pk']
+        return context
+    
+    def get_success_url(self):
+        return reverse("uzsakymas", kwargs={"pk": self.kwargs['pk']})
+    
+    def test_func(self):
+        return Uzsakymas.objects.get(pk=self.kwargs['pk']).user == self.request.user
+    
+    def form_valid(self, form):
+        form.instance.uzsakymas = Uzsakymas.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)
+    
+class PaslaugaUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = Eilute
+    template_name = "paslauga_form.html"
+    fields = ['paslauga', 'kiekis']
+    context_object_name = "paslauga"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['uzsakymas_id'] = self.get_object().uzsakymas.pk
+        return context
+
+    def get_success_url(self):
+        # return reverse("uzsakymas", kwargs={"pk": self.object.uzsakymas_id})
+        uzsakymas_pk = self.object.uzsakymas_id
+        return reverse("uzsakymas", kwargs={"pk": uzsakymas_pk})
+    
+    
+    def test_func(self):
+        # return Uzsakymas.objects.get(pk=self.get_object().uzsakymas.pk).user == self.request.user
+        return self.get_object().uzsakymas.user == self.request.user
+
+    def form_valid(self, form):
+        # form.instance.uzsakymas = Uzsakymas.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)
+    
+class PaslaugaDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = Eilute
+    template_name = "paslauga_delete.html"
+    context_object_name = "paslauga"
+
+    def get_success_url(self):
+        uzsakymas_pk = self.object.uzsakymas_id
+        return reverse("uzsakymas", kwargs={"pk": uzsakymas_pk})
+    
+    def test_func(self):
+        # return Uzsakymas.objects.get(pk=self.get_object().uzsakymas.pk).user == self.request.user
+        return self.get_object().uzsakymas.user == self.request.user

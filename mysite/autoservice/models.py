@@ -8,7 +8,7 @@ from PIL import Image
 
 class Paslauga(m.Model):
     name = m.CharField(verbose_name="Paslaugos tipas")
-    price = m.FloatField(verbose_name="Paslaugos kaina \u20ac",)
+    price = m.FloatField(verbose_name="Paslaugos kaina \u20ac", null=True, default=0)
     
     class Meta:
         verbose_name = "Paslauga"
@@ -63,6 +63,8 @@ class Uzsakymas(m.Model):
     class Meta:
         verbose_name = "Užsakymas"
         verbose_name_plural = "Užsakymai"
+        ordering = ['-pk']
+
 
     def __str__(self):
         return (f"ID: {self.car} - {self.date.strftime('%Y-%m-%d %H:%M')}")
@@ -87,8 +89,9 @@ class UzsakymasInstance(m.Model):
     paslauga = m.ForeignKey(to="Paslauga", 
                             verbose_name="Paslauga",
                             on_delete=m.SET_NULL, null=True, blank=True,
-                            related_name="uz")
-    kiekis = m.IntegerField(verbose_name="Kiekis")
+                            related_name="uzsakymas")
+    kiekis = m.IntegerField(verbose_name="Kiekis", default=1,
+                            )
     
     def line_sum(self):
         return self.kiekis * self.paslauga.price
@@ -122,7 +125,7 @@ class Komentaras(m.Model):
 class CustomUser(AbstractUser):
     photo = m.ImageField(upload_to="profile_pics", null=True, blank=True)
     email = m.EmailField(unique=True, null=True, blank=True)
-    username = m.CharField(unique=True, null=True, blank=True)
+    username = m.CharField(unique=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Paslaugos šalinimas{% endblock %}
+
+{% block content %}
+<h2>Paslaugos šalinimas</h2>
+<hr>
+<p>Ar tikrai norite pašalinti paslaugą "{{ paslauga }}"?</p>
+<form method="POST">
+    {% csrf_token %}
+    {% load crispy_forms_tags %}
+    <button type="submit" class="btn btn-outline-success">Patvirtinti</button>
+    <a class="btn btn-outline-danger" href="{% url 'uzsakymas' paslauga.uzsakymas.pk %}">Atšaukti</a>
+</form>
+{% endblock %}

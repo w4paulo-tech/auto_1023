@@ -7,7 +7,11 @@
 
 <h2>Paieškos rezultatai:</h2>
 <hr>
+{% if query != "" %}
 <p>Rezultatai pagal paieška: "<b>{{ query }}</b>"</p>
+{% else %}
+<p>Rodomi visi įrašai:</p>
+{% endif %}
 <div class="row">
   {% for auto in autos %}
   {% include "cover.html" %}

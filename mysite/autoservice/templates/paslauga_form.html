@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Paslaugų pridėjimas/redagavimas{% endblock%}
+
+{% block content %}
+<h2>Paslaugų pasirinkimas:</h2>
+<hr>
+<form method="POST">
+  {% csrf_token %}
+  {% load crispy_forms_tags %}
+  {{ form | crispy }}
+  <button class="btn btn-outline-success" type="submit">Išsaugoti</button>
+  <a class="btn btn-outline-danger" href="{% url 'uzsakymas' uzsakymas_id %}">Atšaukti</a>
+</form>
+{% endblock%}

@@ -1,5 +1,7 @@
 from django.contrib import admin as a
-from .models import Paslauga, Automobilis, Uzsakymas, UzsakymasInstance as Eilute, Komentaras
+from .models import (Paslauga, Automobilis, Uzsakymas, Komentaras, 
+                     UzsakymasInstance as Eilute,  CustomUser)
+from django.contrib.auth.admin import UserAdmin
 
 class EiluteInLine(a.TabularInline):
     model = Eilute
@@ -37,8 +39,13 @@ class EiluteAdmin(a.ModelAdmin):
 class KomentarasAdmin(a.ModelAdmin):
     list_display = ['uzsakymas', 'komentatorius', 'sukurta', 'turinys']
 
+class CustomUserAdmin(a.ModelAdmin):
+    list_display = ['username', 'email']
+    fieldsets = UserAdmin.fieldsets
+
 a.site.register(Komentaras, KomentarasAdmin)
 a.site.register(Paslauga, PaslaugaAdmin)
 a.site.register(Automobilis, AutomobilisAdmin)
 a.site.register(Uzsakymas, UzsakymasAdmin)
 a.site.register(Eilute, EiluteAdmin)
+a.site.register(CustomUser, CustomUserAdmin)

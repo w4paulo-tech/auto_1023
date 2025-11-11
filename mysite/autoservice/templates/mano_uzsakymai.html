@@ -3,7 +3,13 @@
 {% block title %}Mano užsakymai{% endblock %}
 
 {% block content %}
-<h2>Mano užsakymai</h2>
+<div class="row">
+<h2 class="col-7">Mano užsakymai</h2>
+<span class="col-5">
+  <a class="btn btn-dark btn-sm mx-1 my-1 " href="{% url 'uzsakymas_create' %}">Naujas užsakymas +</a>
+</span>
+</div>
+
 <hr>
 {% for instance in instances %}
 <p class="mx-3">
