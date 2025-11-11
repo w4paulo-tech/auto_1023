@@ -1,8 +1,11 @@
 {% extends "base.html" %}
-
-{% block title %}Prisijungimas{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Login" %}{% endblock %}
 
 {% block content %}
+
+<!-- Reikia paformuoti klaidų žinutes -->
+
 <div class="container mt-5">
     {% if form.non_field_errors %}
     <div class="alert alert-danger">
@@ -15,18 +18,18 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="id_username" class="form-label">Vartotojo vardas</label>
+                    <label for="id_username" class="form-label">{% trans "Username" %}</label>
                     <input type="text" name="username" autofocus required id="id_username" class="form-control">
                 </div>
                 <div class="mb-3">
-                    <label for="id_password" class="form-label">Slaptažodis</label>
+                    <label for="id_password" class="form-label">{% trans "Password" %}</label>
                     <input type="password" name="password" required id="id_password" class="form-control">
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Prisijungti</button>
+                <button type="submit" class="btn btn-primary w-100">{% trans "Login" %}</button>
                 <input type="hidden" name="next" value="{{ next }}"/>
             </form>
 
-            <p><a href="{% url 'password_reset' %}" class="btn btn-link w-100">Pamiršote slaptažodį?</a></p>
+            <p><a href="{% url 'password_reset' %}" class="btn btn-link w-100">{% trans "Forgot password?" %}</a></p>
         </div>
     </div>
 </div>

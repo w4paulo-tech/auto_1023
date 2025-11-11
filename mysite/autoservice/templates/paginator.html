@@ -1,36 +1,43 @@
+{% load i18n %}
 {% if page_obj.has_other_pages %}
 <div class="container mt-5">
   <nav aria-label="...">
     <ul class="pagination pagination-sm justify-content-center"> 
       {% if page_obj.has_previous %}
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Atgal</a>
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+            {% trans "Back" %}</a>
         </li>
       {% else %}
         <li class="page-item disabled">
-          <span class="page-link">Atgal</span>
+          <span class="page-link">
+            {% trans "Back" %}</span>
         </li>
       {% endif %} 
 
       {% for obj in page_obj.paginator.page_range %}
         {% if page_obj.number == obj %}
           <li class="page-item active">
-            <a class="page-link">{{ obj }}</a>
+            <a class="page-link">
+              {{ obj }}</a>
           </li>
         {% else %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ obj }}">{{ obj }}</a>
+            <a class="page-link" href="?page={{ obj }}">
+              {{ obj }}</a>
           </li>
         {% endif %}
       {% endfor %}
 
       {% if page_obj.has_next %}
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Pirmyn</a>
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+            {% trans "Next" %}</a>
         </li>
       {% else %}
         <li class="page-item disabled">
-          <span class="page-link">Pirmyn</span>
+          <span class="page-link">
+            {% trans "Next" %}</span>
         </li>
       {% endif %}
     </ul>

@@ -1,20 +1,20 @@
 {% extends "base.html" %}
-
-{% block title %}Mano užsakymai{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "My Orders" %}{% endblock %}
 
 {% block content %}
 <div class="row">
-<h2 class="col-7">Mano užsakymai</h2>
+<h2 class="col-7">{% trans "My Orders" %}</h2>
 <span class="col-5">
-  <a class="btn btn-dark btn-sm mx-1 my-1 " href="{% url 'uzsakymas_create' %}">Naujas užsakymas +</a>
+  <a class="btn btn-dark btn-sm mx-1 my-1 " href="{% url 'uzsakymas_create' %}">{% trans "New order +" %}</a>
 </span>
 </div>
 
 <hr>
 {% for instance in instances %}
 <p class="mx-3">
-    <a href="{% url 'uzsakymas' instance.pk %}">{{ instance.car }}</a>
-    Užsakymas bus atliktas iki: 
+    <a href="{% url 'uzsakymas' instance.pk %}">{{ instance.filled_id }}</a>
+    {% trans "Order will be completed by:" %}
     <span class="{% if instance.due_date %}text-danger{% endif %}">
         {{ instance.due_back | date:"Y-m-d" }}
     </span>

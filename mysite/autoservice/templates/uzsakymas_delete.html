@@ -1,16 +1,16 @@
 {% extends "base.html" %}
-
-{% block title %}Užsakymo trynimas{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Order delete" %}{% endblock %}
 
 {% block content %}
-<h2>Užsakymo trynimas</h2>
+<h2>{% trans "Order deletion" %}</h2>
 <hr>
-<p>Ar tikrai norite ištrinti užsakymą: {{ uzsakymas }}?</p>
+<p>{% trans "Do you really want to delete order: " %}{{ uzsakymas }}?</p>
 <form method="POST">
     {% csrf_token %}
     {% load crispy_forms_tags %}
-    <button type="submit" class="btn btn-outline-success">Patvirtinti</button>
-    <a class="btn btn-outline-danger" href="{% url 'uzsakymas' uzsakymas.pk %}">Atšaukti</a>
+    <button type="submit" class="btn btn-outline-success">{% trans "Confirm" %}</button>
+    <a class="btn btn-outline-danger" href="{% url 'uzsakymas' uzsakymas.pk %}">{% trans "Cancel" %}</a>
 </form>
 
 {% endblock %}

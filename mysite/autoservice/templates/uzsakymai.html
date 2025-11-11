@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-
-{% block title %}Užsakymai{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Orders" %}{% endblock %}
 
 {% block content %}
-<h2>Serviso užsakymai</h2>
+<h2>{% trans "Autoservice orders" %}</h2>
 <hr>
-<p>Visi serviso užsakymai:</p>
+<p>{% trans "All autoservice orders:" %}</p>
 {% for uzsakymas in uzsakymai %}
   <p class="mx-3"><a href="{{ uzsakymas.pk }}">{{ uzsakymas }}</a></p>
 {% endfor %}

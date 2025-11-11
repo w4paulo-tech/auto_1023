@@ -20,7 +20,6 @@ def index(request):
         'num_atlikti_uzsakymai': Uzsakymas.objects.filter(statusas='a').count(),
         'num_automobiliai': Automobilis.objects.count(),
         'num_visits': num_visits,
-
     }
     return render(request, template_name="index.html", context=my_context)
 
@@ -198,7 +197,6 @@ class PaslaugaUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.Update
         # return reverse("uzsakymas", kwargs={"pk": self.object.uzsakymas_id})
         uzsakymas_pk = self.object.uzsakymas_id
         return reverse("uzsakymas", kwargs={"pk": uzsakymas_pk})
-    
     
     def test_func(self):
         # return Uzsakymas.objects.get(pk=self.get_object().uzsakymas.pk).user == self.request.user

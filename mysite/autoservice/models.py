@@ -4,51 +4,53 @@ from django.contrib.auth.models import User, AbstractUser
 from django.utils import timezone
 from tinymce.models import HTMLField
 from PIL import Image
-
+from django.utils.translation import gettext_lazy as _
 
 class Paslauga(m.Model):
-    name = m.CharField(verbose_name="Paslaugos tipas")
-    price = m.FloatField(verbose_name="Paslaugos kaina \u20ac", null=True, default=0)
+    name = m.CharField(verbose_name=_("Type"))
+    price = m.FloatField(verbose_name=_("Price \u20ac"), null=True, default=0)
     
     class Meta:
-        verbose_name = "Paslauga"
-        verbose_name_plural = "Paslaugos"
+        verbose_name = _("Service")
+        verbose_name_plural = _("Services")
 
     def __str__(self):
         return self.name
     
 class Automobilis(m.Model):
-    make = m.CharField(verbose_name="Markė")
-    model = m.CharField(verbose_name="Modelis")
-    client = m.CharField(verbose_name="Kliento vardas")
-    license_plate = m.CharField(verbose_name="Valstybiniai numeriai")
+    make = m.CharField(verbose_name=_("Make"))
+    model = m.CharField(verbose_name=_("Model"))
+    client = m.CharField(verbose_name=_("Client"))
+    license_plate = m.CharField(verbose_name=_("License plate"))
     vin_code = m.CharField(verbose_name="VIN", max_length=17)
-    cover = m.ImageField(verbose_name="Viršelis", 
+    cover = m.ImageField(verbose_name=_("Cover"), 
                          upload_to="covers",
                          null=True, blank=True)
-    description = HTMLField(verbose_name="Aprašymas", default="")
+    description = HTMLField(verbose_name=_("Description"), default="")
 
     class Meta:
-        verbose_name = "Automobilis"
-        verbose_name_plural = "Automobiliai"
-
-    def filled_id(self):
-        return str(self.id).zfill(6)
+        verbose_name = _("Car")
+        verbose_name_plural = _("Cars")
 
     def __str__(self):
-        return (f"{self.filled_id()} {self.make} {self.model}")
+        return (f"{self.make} {self.model}")
 
 class Uzsakymas(m.Model):
-    date = m.DateTimeField(verbose_name="Užsakymo data", 
+    date = m.DateTimeField(verbose_name=_("Date"), 
                            auto_now_add=True)
     car = m.ForeignKey(to="Automobilis", 
-                       verbose_name="Klientas", 
-                       on_delete=m.SET_NULL, null=True, blank=True,)
+                       verbose_name=_("Client"), 
+                       on_delete=m.SET_NULL, null=True, blank=True,
+                       related_name="uzsakymas")
     user = m.ForeignKey(to="autoservice.CustomUser", 
-                        verbose_name="Vartotojas", 
+                        verbose_name=_("User"), 
                         on_delete=m.SET_NULL, null=True, blank=True)
-    due_back = m.DateField(verbose_name="Grąžinimo data", null=True, blank=True)
+    due_back = m.DateField(verbose_name=_("Due back"), null=True, blank=True)
     
+    def filled_id(self):
+        year = self.date.strftime('%y') if self.date else timezone.now().strftime('%y')
+        return f"MA-{(year)}{str(self.id).zfill(4)}"
+
     def due_date(self):
         return self.due_back and timezone.now().date() > self.due_back
     
@@ -58,68 +60,68 @@ class Uzsakymas(m.Model):
             result += line.line_sum()
         return result
     
-    total.short_description = "Viso \u20ac"
+    total.short_description = _("Total \u20ac")
                
     class Meta:
-        verbose_name = "Užsakymas"
-        verbose_name_plural = "Užsakymai"
+        verbose_name = _("Order")
+        verbose_name_plural = _("Orders")
         ordering = ['-pk']
 
 
     def __str__(self):
-        return (f"ID: {self.car} - {self.date.strftime('%Y-%m-%d %H:%M')}")
+        return (f"SF Nr.: {self.filled_id()} {self.car}")
     
     UZSAKYMO_STATUSAS = (
-        ('a', "Atlikta"),
-        ('r', "Ruošiama"),
-        ('n', "Nepradėta"),
-        ('s', "Sustabdyta"),
-        ('c', "Atšaukta"),
+        ('a', _("Done")),
+        ('r', _("In preparation")),
+        ('n', _("Not started")),
+        ('s', _("Suspended")),
+        ('c', _("Canceled")),
     )
-    statusas = m.CharField(verbose_name="Būsena", 
+    statusas = m.CharField(verbose_name=_("Status"), 
                            max_length=1, 
                            choices=UZSAKYMO_STATUSAS, 
                            default="n", blank=True)
 
 class UzsakymasInstance(m.Model):
     uzsakymas = m.ForeignKey(to="Uzsakymas", 
-                             verbose_name="Užsakymas", 
+                             verbose_name=_("Order"), 
                              on_delete=m.CASCADE, 
                              related_name="lines")
     paslauga = m.ForeignKey(to="Paslauga", 
-                            verbose_name="Paslauga",
+                            verbose_name=_("Service"),
                             on_delete=m.SET_NULL, null=True, blank=True,
                             related_name="uzsakymas")
-    kiekis = m.IntegerField(verbose_name="Kiekis", default=1,
+    kiekis = m.IntegerField(verbose_name=_("Quantity"), default=1,
                             )
     
     def line_sum(self):
         return self.kiekis * self.paslauga.price
     
-    line_sum.short_description = "Suma \u20ac"
+    line_sum.short_description = _("Sum \u20ac")
 
     class Meta:
-        verbose_name = "Užsakymo eilutė"
-        verbose_name_plural = "Užsakymo eilutės"
+        verbose_name = _("Order line")
+        verbose_name_plural = _("Order lines")
 
     def __str__(self):
-        return (f" {self.paslauga} {self.kiekis}vnt")
+        return (f" {self.paslauga} {self.kiekis}{_('pcs')}")
 
 class Komentaras(m.Model):
     uzsakymas = m.ForeignKey(to="Uzsakymas",
-                             verbose_name="Užsakymas",
+                             verbose_name=_("Order"),
                              on_delete=m.SET_NULL,
                              null=True, blank=True,
                              related_name="komentaras")
     komentatorius = m.ForeignKey(to="autoservice.CustomUser", 
-                                 verbose_name="Autorius",
+                                 verbose_name=_("Author"),
                                  on_delete=m.SET_NULL, null=True, blank=True)
-    sukurta = m.DateTimeField(verbose_name="Data", auto_now_add=True)
-    turinys = m.TextField(verbose_name="Tekstas")
+    sukurta = m.DateTimeField(verbose_name=_("Date"), auto_now_add=True)
+    turinys = m.TextField(verbose_name=_("Text"))
 
     class Meta:
-        verbose_name = "Komentaras"
-        verbose_name_plural = "Komentarai"
+        verbose_name = _("Comment")
+        verbose_name_plural = _("Comments")
         ordering = ['-pk']
 
 class CustomUser(AbstractUser):

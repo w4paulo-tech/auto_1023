@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-
-{% block title %}Vartotojo profilis{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "User profile" %}{% endblock %}
 
 {% block content %}
 {% load static %}
-<h2>Mano profilis</h2>
+<h2>{% trans "My profile" %}</h2>
 <hr>
 <div class="row">
   <div class="col-md-7">
-      <p><b>Vartotojo vardas: </b>{{ user.username }}</p>
-      <p><b>Vardas: </b>{{ user.first_name }}</p>
-      <p><b>Pavardė: </b>{{ user.last_name }}</p>
-      <p><b>El. pašto adresas: </b>{{ user.email }}</p>
+      <p><b>{% trans "Username: " %}</b>{{ user.username }}</p>
+      <p><b>{% trans "First name: " %}</b>{{ user.first_name }}</p>
+      <p><b>{% trans "Last name: " %}</b>{{ user.last_name }}</p>
+      <p><b>{% trans "Email: " %}</b>{{ user.email }}</p>
   </div>
   <div class="col-md-5">
     {% if user.photo %}
@@ -24,13 +24,13 @@
     {% endif %}
   </div>
 </div>
-    <h2>Profilio atnaujinimas</h2>
+    <h2>{% trans "Edit profile" %}</h2>
     <hr>
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       {% load crispy_forms_tags %}
       {{ form | crispy }}
-      <button type="submit" class="btn btn-success">Atnaujinti</button>
+      <button type="submit" class="btn btn-success">{% trans "Save" %}</button>
     </form>
 
 {% endblock %}

@@ -1,19 +1,19 @@
 {% extends "base.html" %}
-
-{% block title %}Automobilis{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Car" %}{% endblock %}
 
 {% block content %}
 {% load static %}
 
-<h2>Info apie automobilį:</h2>
+<h2>{% trans "Info about the car: " %}</h2>
 <hr>
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-6 col-sm-12">
-      <p><b>Savininkas:</b> {{ auto.client }}</p>
-      <p><b>Automobilio modelis:</b> {{ auto.make }} {{ auto.model }}</p>
-      <p><b>Valstybinis numeris:</b> {{ auto.license_plate }}</p>
-      <p><b>VIN:</b> {{ auto.vin_code }}</p>
+      <p><b>{% trans "Client: " %}</b>{{ auto.client }}</p>
+      <p><b>{% trans "Car model: " %}</b>{{ auto.make }} {{ auto.model }}</p>
+      <p><b>{% trans "License plate: " %}</b>{{ auto.license_plate }}</p>
+      <p><b>VIN: </b>{{ auto.vin_code }}</p>
     </div>
     <div class="col-md-6 col-sm-12">
       {% include "image.html" %}

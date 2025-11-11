@@ -1,4 +1,5 @@
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+{% load i18n %}
+<nav class="navbar navbar-expand-md bg-dark navbar-dark" style="font-size: 20px;">
   <div class="container-fluid">
     <button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
         <span class="navbar-toggler-icon"></span>
@@ -7,13 +8,13 @@
     <div class="collapse navbar-collapse order-2" id="mynavbar">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'index' %}">PRADŽIA</a>
+          <a class="nav-link" href="{% url 'index' %}">{% trans "HOME" %}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'automobiliai' %}">Automobiliai</a>
+          <a class="nav-link" href="{% url 'automobiliai' %}">{% trans "Cars" %}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'uzsakymai' %}">Užsakymai</a>
+          <a class="nav-link" href="{% url 'uzsakymai' %}">{% trans "Orders" %}</a>
         </li>
       </ul>
     </div>
@@ -29,34 +30,56 @@
           </a>
           <ul class="dropdown-menu ">
             <li>
-              <a class="dropdown-item text-white" href="{% url 'profile' %}">Mano Profilis</a>
+              <a class="dropdown-item text-white" href="{% url 'profile' %}">{% trans "My Profile" %}</a>
             </li>
             <li>
-              <a class="dropdown-item text-white" href="{% url 'manouzsakymai' %}">Mano Užsakymai</a>
+              <a class="dropdown-item text-white" href="{% url 'manouzsakymai' %}">{% trans "My Orders" %}</a>
             </li>
             <li>
               <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
-                <button class="dropdown-item text-white" type="submit">Atsijungti</button> 
+                <button class="dropdown-item text-white" type="submit">{% trans "Logout" %}</button> 
               </form>
             </li>
           </ul> 
         {% else %}
           <li>
-            <a class="nav-link ps-1 pe-1" href="{% url 'signup' %}">Registruotis</a>
+            <a class="nav-link ps-1 pe-1" href="{% url 'signup' %}">{% trans "Signup" %}</a>
           </li>
           <span class="navbar-text"><b> / </b></span>
           <li>
-            <a class="nav-link ps-1" href="{% url 'login' %}">Prisijungti</a>
+            <a class="nav-link ps-1" href="{% url 'login' %}">{% trans "Login" %}</a>
           </li>
         {% endif %}     
       </li>  
       </ul>
     </div>
+
+    <li class="nav-item d-flex order-4 ms-2 ">
+    {% load i18n %}
+    <form action="{% url 'set_language' %}" method="post" class="d-flex">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}"/>
+        <select name="language" class="form-control me-2 text-white text-center" 
+        style="border:3px solid rgb(0, 0, 0); background-color: oklch(19.911% 0.03945 138.921 / 0.923);" 
+        onchange="this.form.submit()">
+            {% load static %}
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% for lang in LANGUAGES %}
+            <option value="{{ lang.0 }}"
+                    {% if lang.0 == LANGUAGE_CODE %}selected="selected" {% endif %}>
+                {{ lang.1 }}
+            </option>
+            {% endfor %}
+        </select>
+      </form>
+    </li>
+
     
-      <li class="nav-item d-flex order-4 ms-auto mt-2 mt-sm-1 mb-1 ps-2">
+      <li class="nav-item d-flex order-5 ms-auto mt-2 mt-sm-1 mb-1 ps-2">
         <form action="{% url 'paieska' %}" method="get" class="me-auto d-flex">
-          <input name="query" class="form-control" type="text" placeholder="Paieška">
+          <input name="query" class="form-control" type="text" placeholder="{% trans 'Search' %}">
         </form>
       </li>
   </div>

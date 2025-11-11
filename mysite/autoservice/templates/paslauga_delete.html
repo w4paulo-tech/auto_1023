@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-
-{% block title %}Paslaugos šalinimas{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Service delete" %}{% endblock %}
 
 {% block content %}
-<h2>Paslaugos šalinimas</h2>
+<h2>{% trans "Service deletion" %}</h2>
 <hr>
-<p>Ar tikrai norite pašalinti paslaugą "{{ paslauga }}"?</p>
+<p>{% trans "Do you really want to delete service: " %}{{ paslauga }}?</p>
 <form method="POST">
     {% csrf_token %}
     {% load crispy_forms_tags %}
-    <button type="submit" class="btn btn-outline-success">Patvirtinti</button>
-    <a class="btn btn-outline-danger" href="{% url 'uzsakymas' paslauga.uzsakymas.pk %}">Atšaukti</a>
+    <button type="submit" class="btn btn-outline-success">{% trans "Confirm" %}</button>
+    <a class="btn btn-outline-danger" href="{% url 'uzsakymas' paslauga.uzsakymas.pk %}">{% trans "Cancel" %}</a>
 </form>
 {% endblock %}

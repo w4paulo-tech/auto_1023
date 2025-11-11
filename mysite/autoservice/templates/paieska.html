@@ -1,22 +1,22 @@
 {% extends "base.html" %}
-
-{% block title %}Paieška{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Search" %}{% endblock %}
 
 {% block content %}
 {% load static %}
 
-<h2>Paieškos rezultatai:</h2>
+<h2>{% trans "Search results:" %}</h2>
 <hr>
 {% if query != "" %}
-<p>Rezultatai pagal paieška: "<b>{{ query }}</b>"</p>
+<p>{% trans "Results from query: " %}"<b>{{ query }}</b>"</p>
 {% else %}
-<p>Rodomi visi įrašai:</p>
+<p>{% trans "Showing all cars" %}</p>
 {% endif %}
 <div class="row">
   {% for auto in autos %}
   {% include "cover.html" %}
   {% empty %}
-  <p class="mx-3">Įrašų nerasta</p>
+  <p class="mx-3">{% trans "No results found" %}</p>
   {% endfor %}
 </div>
 {% include "paginator.html" with page_obj=autos %}
