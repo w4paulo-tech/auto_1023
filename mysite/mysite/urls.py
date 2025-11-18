@@ -5,9 +5,9 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('autoservice/', include('autoservice.urls')),
+    path('', include('autoservice.urls')),
     path('admin/', admin.site.urls),
-    path('', RedirectView.as_view(url='autoservice/', permanent=True)),
+    # path('', RedirectView.as_view(url='autoservice/', permanent=True)),
     path('accounts/', include('django.contrib.auth.urls')),
     path('tinymce/', include('tinymce.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
